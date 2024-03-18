@@ -5,8 +5,11 @@ import com.jetbrains.kmpapp.data.KtorMuseumApi
 import com.jetbrains.kmpapp.data.MuseumApi
 import com.jetbrains.kmpapp.data.MuseumRepository
 import com.jetbrains.kmpapp.data.MuseumStorage
-import com.jetbrains.kmpapp.presentation.screens.detail.DetailScreenModel
 import com.jetbrains.kmpapp.presentation.screens.list.ListScreenModel
+import com.jetbrains.kmpapp.presentation.screens.additem.AddItemScreenModel
+import com.jetbrains.kmpapp.presentation.screens.edititem.EditItemScreenModel
+import com.jetbrains.kmpapp.utils.Platform
+import com.jetbrains.kmpapp.utils.getPlatform
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -28,7 +31,12 @@ val dataModule = module {
             }
             defaultRequest {
                 contentType(ContentType.Application.Json)
-                url("")
+                url(
+                    when(getPlatform()) {
+                        Platform.ANDROID -> "http://10.0.2.2:8080/"
+                        Platform.IOS -> "http://localhost:8080/"
+                    }
+                )
             }
         }
     }
@@ -43,8 +51,9 @@ val dataModule = module {
 }
 
 val screenModelsModule = module {
+    factoryOf(::AddItemScreenModel)
     factoryOf(::ListScreenModel)
-    factoryOf(::DetailScreenModel)
+    factoryOf(::EditItemScreenModel)
 }
 
 fun initKoin() {

@@ -49,3 +49,27 @@ private fun ListPreview() {
         onBackButtonClick = {},
     )
 }
+
+@Preview
+@Composable
+private fun ListEmptyPreview() {
+    ListTemplate(
+        shoppingItems = emptyList(),
+        onDeleteClick = {},
+        onItemClick = {},
+        onBackButtonClick = {},
+    )
+}
+
+@Preview
+@Composable
+private fun ListLoadingPreview() {
+    ListTemplate(
+        shoppingItems = emptyList(),
+        onDeleteClick = {},
+        onItemClick = {},
+        onBackButtonClick = {},
+        loading = true
+    )
+}
+

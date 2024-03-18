@@ -11,8 +11,15 @@ import com.jetbrains.kmpapp.presentation.atomic.molecules.ButtonMolecule
 import com.jetbrains.kmpapp.presentation.atomic.molecules.FieldType
 import com.jetbrains.kmpapp.presentation.atomic.molecules.ShoppingItemMolecule
 import com.jetbrains.kmpapp.presentation.atomic.molecules.TextFieldMolecule
+import com.jetbrains.kmpapp.presentation.atomic.organisms.EmptyListOrganism
 import com.jetbrains.kmpapp.presentation.atomic.organisms.TopBarOrganism
 import dev.icerock.moko.resources.compose.painterResource
+
+@Preview(showBackground = true)
+@Composable
+private fun EmptyListPreview() {
+    EmptyListOrganism()
+}
 
 @Preview
 @Composable
@@ -46,6 +53,17 @@ private fun ButtonPreview() {
         modifier = Modifier.fillMaxWidth(),
         label = "Criar",
         onClick = { /*TODO*/ },
+    )
+}
+
+@Preview
+@Composable
+private fun ButtonLoadingPreview() {
+    ButtonMolecule(
+        modifier = Modifier.fillMaxWidth(),
+        label = "Criar",
+        onClick = { /*TODO*/ },
+        loading = true,
     )
 }
 

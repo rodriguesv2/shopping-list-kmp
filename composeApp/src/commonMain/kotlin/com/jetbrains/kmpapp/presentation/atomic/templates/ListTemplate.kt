@@ -17,6 +17,7 @@ import com.jetbrains.kmpapp.MR
 import com.jetbrains.kmpapp.domain.entities.ShoppingItem
 import com.jetbrains.kmpapp.presentation.atomic.atoms.IconButtonAtom
 import com.jetbrains.kmpapp.presentation.atomic.molecules.ShoppingItemMolecule
+import com.jetbrains.kmpapp.presentation.atomic.organisms.EmptyListOrganism
 import com.jetbrains.kmpapp.presentation.atomic.organisms.TopBarOrganism
 import com.jetbrains.kmpapp.presentation.components.SpacerPadding
 import dev.icerock.moko.resources.compose.painterResource
@@ -28,6 +29,7 @@ fun ListTemplate(
     onDeleteClick: (ShoppingItem) -> Unit,
     onItemClick: (ShoppingItem) -> Unit,
     onBackButtonClick: () -> Unit,
+    loading: Boolean = false,
 ) {
     Scaffold(
         topBar = {
@@ -49,17 +51,23 @@ fun ListTemplate(
                 fontSize = 16.sp
             )
             SpacerPadding()
-            LazyColumn {
-                items(shoppingItems) { item ->
-                    Divider(color = Color(0xFFF4F4F4))
-                    ShoppingItemMolecule(
-                        modifier = Modifier.clickable {
-                            onItemClick(item)
-                        },
-                        title = item.title,
-                        quantity = item.quantity,
-                        onDeleteClick = { onDeleteClick(item) }
-                    )
+            when {
+                loading -> LoadingFullScreen()
+                shoppingItems.isEmpty() -> EmptyListOrganism()
+                else -> {
+                    LazyColumn {
+                        items(shoppingItems) { item ->
+                            Divider(color = Color(0xFFF4F4F4))
+                            ShoppingItemMolecule(
+                                modifier = Modifier.clickable {
+                                    onItemClick(item)
+                                },
+                                title = item.title,
+                                quantity = item.quantity,
+                                onDeleteClick = { onDeleteClick(item) }
+                            )
+                        }
+                    }
                 }
             }
         }

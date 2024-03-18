@@ -31,7 +31,9 @@ fun EditItemFormTemplate(
     onQuantityChange: (String) -> Unit,
     onButtonClick: () -> Unit,
     onBackButtonClick: (() -> Unit)? = null,
-    onListButtonClick: (() -> Unit)? = null
+    onListButtonClick: (() -> Unit)? = null,
+    isButtonEnabled: Boolean = true,
+    isLoading: Boolean = false,
 ) {
     Scaffold(
         topBar = {
@@ -87,6 +89,8 @@ fun EditItemFormTemplate(
                 modifier = Modifier.fillMaxWidth(),
                 label = buttonLabel,
                 onClick = onButtonClick,
+                isEnabled = isButtonEnabled,
+                loading = isLoading,
             )
         }
     }

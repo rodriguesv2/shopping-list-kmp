@@ -2,24 +2,21 @@ package com.jetbrains.kmpapp.presentation.screens.list
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -28,98 +25,115 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.jetbrains.kmpapp.MR
 import com.jetbrains.kmpapp.data.MuseumObject
-import com.jetbrains.kmpapp.presentation.atomic.atoms.IconButtonAtom
+import com.jetbrains.kmpapp.presentation.atomic.molecules.ButtonMolecule
+import com.jetbrains.kmpapp.presentation.atomic.templates.ListTemplate
 import com.jetbrains.kmpapp.presentation.screens.EmptyScreenContent
-import com.jetbrains.kmpapp.presentation.screens.detail.DetailScreen
+import dev.icerock.moko.resources.compose.stringResource
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
-data object ListScreen : Screen {
+object ListScreen : Screen {
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
         val screenModel: ListScreenModel = getScreenModel()
+        val state by screenModel.state.collectAsState()
 
-        val objects by screenModel.objects.collectAsState()
-
-//        AnimatedContent(objects.isNotEmpty()) { objectsAvailable ->
-//            if (objectsAvailable) {
-//                ObjectGrid(
-//                    objects = objects,
-//                    onObjectClick = { objectId ->
-//                        navigator.push(DetailScreen(objectId))
-//                    }
-//                )
+//        val obj by screenModel.getObject(objectId).collectAsState(initial = null)
+//        AnimatedContent(obj != null) { objectAvailable ->
+//            if (objectAvailable) {
+//                ObjectDetails(obj!!, onBackClick = { navigator.pop() })
 //            } else {
 //                EmptyScreenContent(Modifier.fillMaxSize())
 //            }
 //        }
-        Scaffold(
-            topBar = {
-//                TopBarMolecule("Teste")
-            }
-        ) {
 
-        }
+        ListTemplate(
+            shoppingItems = state.items,
+            loading = state.loading,
+            onDeleteClick = screenModel::onDeleteClick,
+            onItemClick = screenModel::onItemClick,
+            onBackButtonClick = screenModel::onBackButtonClick,
+        )
     }
 }
 
 @Composable
-private fun ObjectGrid(
-    objects: List<MuseumObject>,
-    onObjectClick: (Int) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    LazyRow() { }
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(180.dp),
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(8.dp)
-    ) {
-        items(objects, key = { it.objectID }) { obj ->
-            ObjectFrame(
-                obj = obj,
-                onClick = { onObjectClick(obj.objectID) },
-            )
-        }
-    }
-}
-
-@Composable
-private fun ObjectFrame(
+private fun ObjectDetails(
     obj: MuseumObject,
-    onClick: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier
-            .padding(8.dp)
-            .clickable { onClick() }
-    ) {
-        KamelImage(
-            resource = asyncPainterResource(data = obj.primaryImageSmall),
-            contentDescription = obj.title,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .background(Color.LightGray),
-        )
+    Scaffold(
+        topBar = {
+            TopAppBar(backgroundColor = Color.White) {
+                IconButton(onClick = onBackClick) {
+                    Icon(Icons.Default.ArrowBack, stringResource(MR.strings.back))
+                }
+            }
+        },
+        modifier = modifier,
+    ) { paddingValues ->
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(paddingValues)
+        ) {
+            KamelImage(
+                resource = asyncPainterResource(data = obj.primaryImageSmall),
+                contentDescription = obj.title,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.LightGray)
+            )
 
-        Spacer(Modifier.height(2.dp))
+            SelectionContainer {
+                Column(Modifier.padding(12.dp)) {
+                    Text(
+                        obj.title,
+                        style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold)
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    LabeledInfo(stringResource(MR.strings.label_title), obj.title)
+                    LabeledInfo(stringResource(MR.strings.label_artist), obj.artistDisplayName)
+                    LabeledInfo(stringResource(MR.strings.label_date), obj.objectDate)
+                    LabeledInfo(stringResource(MR.strings.label_dimensions), obj.dimensions)
+                    LabeledInfo(stringResource(MR.strings.label_medium), obj.medium)
+                    LabeledInfo(stringResource(MR.strings.label_department), obj.department)
+                    LabeledInfo(stringResource(MR.strings.label_repository), obj.repository)
+                    LabeledInfo(stringResource(MR.strings.label_credits), obj.creditLine)
+                }
+            }
+        }
+    }
+}
 
+@Composable
+private fun LabeledInfo(
+    label: String,
+    data: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier.padding(vertical = 4.dp)) {
+        Spacer(Modifier.height(6.dp))
         Text(
-            obj.title,
-            style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Bold)
+            buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                    append("$label: ")
+                }
+                append(data)
+            }
         )
-        Text(obj.artistDisplayName, style = MaterialTheme.typography.body2)
-        Text(obj.objectDate, style = MaterialTheme.typography.caption)
     }
 }

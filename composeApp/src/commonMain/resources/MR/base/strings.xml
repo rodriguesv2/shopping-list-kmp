@@ -23,4 +23,10 @@
     <!--  LIST ITEMS  -->
     <string name="list_item_title">Gerenciar Itens</string>
     <string name="list_item_subtitle">Veja e gerencie os seus items de compras</string>
+    <string name="list_item_empty">Nenhum Item Adicionado!</string>
+
+    <!--  EDIT ITEMS  -->
+    <string name="edit_item_title">Editar Item</string>
+    <string name="edit_item_subtitle">Edite o item selecionado</string>
+    <string name="edit_item_save_button">Salvar</string>
 </resources>
