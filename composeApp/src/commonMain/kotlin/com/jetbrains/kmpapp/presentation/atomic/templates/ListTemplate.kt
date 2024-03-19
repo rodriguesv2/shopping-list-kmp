@@ -31,7 +31,7 @@ fun ListTemplate(
     shoppingItems: List<ShoppingItem>,
     onDeleteClick: (ShoppingItem) -> Unit,
     onItemClick: (ShoppingItem) -> Unit,
-    onBackButtonClick: () -> Unit,
+    onAddItemClick: () -> Unit,
     loading: Boolean = false,
     snackbarHostState: SnackbarHostState = SnackbarHostState(),
 ) {
@@ -39,10 +39,10 @@ fun ListTemplate(
         topBar = {
             TopBarOrganism(
                 title = stringResource(MR.strings.list_item_title),
-                navigationIcon = {
+                actions = {
                     IconButtonAtom(
-                        painter = painterResource(imageResource = MR.images.ic_back_arrow),
-                        onClick = onBackButtonClick,
+                        painter = painterResource(imageResource = MR.images.ic_add),
+                        onClick = onAddItemClick
                     )
                 }
             )

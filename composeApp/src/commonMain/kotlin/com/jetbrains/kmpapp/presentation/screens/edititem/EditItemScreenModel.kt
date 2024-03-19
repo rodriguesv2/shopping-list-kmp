@@ -9,6 +9,7 @@ import com.jetbrains.kmpapp.navigator
 import com.jetbrains.kmpapp.utils.extensions.launchRequest
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -51,7 +52,13 @@ class EditItemScreenModel(
         screenModelScope.launchRequest(
             block = { repository.updateItem(shoppingItem) },
             onLoading = { loading -> mutableState.update { it.copy(loading = loading) } },
-            onSuccess = { showSuccessSnack() },
+            onSuccess = {
+                showSuccessSnack()
+                screenModelScope.launch {
+                    delay(1100L)
+                    navigator.pop()
+                }
+            },
             onError = { error ->
                 mutableState.update {
                     it.copy(

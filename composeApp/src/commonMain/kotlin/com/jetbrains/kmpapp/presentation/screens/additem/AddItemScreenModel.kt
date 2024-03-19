@@ -57,12 +57,12 @@ class AddItemScreenModel(
         )
     }
 
-    fun onListButtonClick() {
-        navigator.push(ListScreen)
-    }
-
     fun onDismissClick() {
         mutableState.update { it.copy(errorMessage = null) }
+    }
+
+    fun onBackButtonClick() {
+        navigator.pop()
     }
 
     private fun setButtonState() {

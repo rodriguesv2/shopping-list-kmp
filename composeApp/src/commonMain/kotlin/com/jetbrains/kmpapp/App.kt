@@ -5,11 +5,12 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.ScaleTransition
 import com.jetbrains.kmpapp.presentation.screens.additem.AddItemScreen
+import com.jetbrains.kmpapp.presentation.screens.list.ListScreen
 
 @Composable
 fun App() {
     MaterialTheme {
-        Navigator(AddItemScreen) { navigator ->
+        Navigator(ListScreen) { navigator ->
             ScaleTransition(navigator)
             saveAppNavigator(navigator)
 

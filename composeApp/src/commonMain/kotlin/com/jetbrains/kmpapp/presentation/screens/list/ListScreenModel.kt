@@ -1,19 +1,16 @@
 package com.jetbrains.kmpapp.presentation.screens.list
 
 import androidx.compose.material.SnackbarDuration
-import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.jetbrains.kmpapp.data.MuseumObject
-import com.jetbrains.kmpapp.data.MuseumRepository
 import com.jetbrains.kmpapp.domain.entities.ShoppingItem
 import com.jetbrains.kmpapp.domain.repositories.ShoppingRepository
 import com.jetbrains.kmpapp.navigator
+import com.jetbrains.kmpapp.presentation.screens.additem.AddItemScreen
 import com.jetbrains.kmpapp.presentation.screens.edititem.EditItemScreen
 import com.jetbrains.kmpapp.utils.extensions.launchRequest
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -64,8 +61,8 @@ class ListScreenModel(
         navigator.push(EditItemScreen(shoppingItem))
     }
 
-    fun onBackButtonClick() {
-        navigator.pop()
+    fun onAddItemClick() {
+        navigator.push(AddItemScreen)
     }
 
     fun onDismissClick() {

@@ -35,7 +35,7 @@ data object AddItemScreen : Screen {
             onNameChange = screenModel::onNameChange,
             onQuantityChange = screenModel::onQuantityChange,
             onButtonClick = screenModel::onButtonClick,
-            onListButtonClick = screenModel::onListButtonClick,
+            onBackButtonClick = screenModel::onBackButtonClick,
         )
     }
 }

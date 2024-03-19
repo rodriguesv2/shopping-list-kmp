@@ -46,7 +46,7 @@ private fun ListPreview() {
         },
         onDeleteClick = {},
         onItemClick = {},
-        onBackButtonClick = {},
+       onAddItemClick = {}
     )
 }
 
@@ -57,7 +57,7 @@ private fun ListEmptyPreview() {
         shoppingItems = emptyList(),
         onDeleteClick = {},
         onItemClick = {},
-        onBackButtonClick = {},
+        onAddItemClick = {},
     )
 }
 
@@ -68,7 +68,7 @@ private fun ListLoadingPreview() {
         shoppingItems = emptyList(),
         onDeleteClick = {},
         onItemClick = {},
-        onBackButtonClick = {},
+        onAddItemClick = {},
         loading = true
     )
 }
