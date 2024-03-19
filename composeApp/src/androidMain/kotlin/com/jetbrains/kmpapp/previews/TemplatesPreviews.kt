@@ -1,4 +1,4 @@
-package com.jetbrains.kmpapp
+package com.jetbrains.kmpapp.previews
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview

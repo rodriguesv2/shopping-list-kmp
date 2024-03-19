@@ -1,4 +1,4 @@
-package com.jetbrains.kmpapp
+package com.jetbrains.kmpapp.previews
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface

@@ -3,11 +3,9 @@ package com.jetbrains.kmpapp.presentation.screens.additem
 import androidx.compose.material.SnackbarDuration
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.jetbrains.kmpapp.data.MuseumRepository
 import com.jetbrains.kmpapp.domain.entities.ShoppingItem
 import com.jetbrains.kmpapp.domain.repositories.ShoppingRepository
 import com.jetbrains.kmpapp.navigator
-import com.jetbrains.kmpapp.presentation.screens.list.ListScreen
 import com.jetbrains.kmpapp.utils.extensions.launchRequest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
