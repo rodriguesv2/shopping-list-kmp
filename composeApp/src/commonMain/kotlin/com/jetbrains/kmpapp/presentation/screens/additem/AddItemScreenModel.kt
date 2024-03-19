@@ -1,13 +1,19 @@
 package com.jetbrains.kmpapp.presentation.screens.additem
 
+import androidx.compose.material.SnackbarDuration
 import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.jetbrains.kmpapp.data.MuseumRepository
+import com.jetbrains.kmpapp.domain.entities.ShoppingItem
+import com.jetbrains.kmpapp.domain.repositories.ShoppingRepository
 import com.jetbrains.kmpapp.navigator
 import com.jetbrains.kmpapp.presentation.screens.list.ListScreen
+import com.jetbrains.kmpapp.utils.extensions.launchRequest
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class AddItemScreenModel(
-//    museumRepository: MuseumRepository,
+    private val repository: ShoppingRepository
 ) : StateScreenModel<AddItemState>(AddItemState()) {
     init {
         setButtonState()
@@ -28,11 +34,35 @@ class AddItemScreenModel(
     }
 
     fun onButtonClick() {
-        //TODO("Not yet implemented")
+        val shoppingItem = state.value.run {
+            ShoppingItem(
+                title = itemName,
+                quantity = itemQuantity,
+            )
+        }
+
+        screenModelScope.launchRequest(
+            block = { repository.createItem(shoppingItem) },
+            onLoading = { loading -> mutableState.update { it.copy(loading = loading) } },
+            onSuccess = {
+                showSuccessSnack()
+                mutableState.update {
+                    it.copy(
+                        itemName = "",
+                        itemQuantity = "1"
+                    )
+                }
+            },
+            onError = { mutableState.update { it.copy(errorMessage = "Erro Desconhecido") } }
+        )
     }
 
     fun onListButtonClick() {
         navigator.push(ListScreen)
+    }
+
+    fun onDismissClick() {
+        mutableState.update { it.copy(errorMessage = null) }
     }
 
     private fun setButtonState() {
@@ -45,7 +75,13 @@ class AddItemScreenModel(
             )
         }
     }
-//    val objects: StateFlow<List<MuseumObject>> =
-//        museumRepository.getObjects()
-//            .stateIn(screenModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    private fun showSuccessSnack() {
+        screenModelScope.launch {
+            state.value.snackbarHostState.showSnackbar(
+                message = "Item Adicionado com Sucesso!",
+                duration = SnackbarDuration.Short,
+            )
+        }
+    }
 }

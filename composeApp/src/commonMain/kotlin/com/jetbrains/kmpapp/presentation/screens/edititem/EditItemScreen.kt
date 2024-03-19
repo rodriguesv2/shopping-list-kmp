@@ -8,6 +8,7 @@ import cafe.adriel.voyager.koin.getScreenModel
 import com.jetbrains.kmpapp.MR
 import com.jetbrains.kmpapp.domain.entities.ShoppingItem
 import com.jetbrains.kmpapp.presentation.atomic.templates.EditItemFormTemplate
+import com.jetbrains.kmpapp.presentation.dialogs.ErrorDialog
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.parameter.ParametersHolder
 
@@ -24,6 +25,13 @@ class EditItemScreen(private val item: ShoppingItem): Screen{
         )
         val state by screenModel.state.collectAsState()
 
+        state.errorMessage?.let { message ->
+            ErrorDialog(
+                text = message,
+                onDismiss = screenModel::onDismissClick,
+                onConfirmClick = screenModel::onDismissClick,
+            )
+        }
         EditItemFormTemplate(
             title = stringResource(MR.strings.edit_item_title),
             subtitle = stringResource(MR.strings.edit_item_subtitle),
@@ -32,6 +40,7 @@ class EditItemScreen(private val item: ShoppingItem): Screen{
             quantityValue = state.itemQuantity,
             isButtonEnabled = state.isButtonEnabled,
             isLoading = state.loading,
+            snackbarHostState = state.snackbarHostState,
             onNameChange = screenModel::onNameChange,
             onQuantityChange = screenModel::onQuantityChange,
             onButtonClick = screenModel::onButtonClick,

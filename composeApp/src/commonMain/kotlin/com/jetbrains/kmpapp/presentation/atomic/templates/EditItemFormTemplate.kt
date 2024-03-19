@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,6 +33,7 @@ fun EditItemFormTemplate(
     onNameChange: (String) -> Unit,
     onQuantityChange: (String) -> Unit,
     onButtonClick: () -> Unit,
+    snackbarHostState: SnackbarHostState = SnackbarHostState(),
     onBackButtonClick: (() -> Unit)? = null,
     onListButtonClick: (() -> Unit)? = null,
     isButtonEnabled: Boolean = true,
@@ -54,6 +58,18 @@ fun EditItemFormTemplate(
                             onClick = callback
                         )
                     }
+                }
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = {
+                    Snackbar(
+                        content = {
+                            Text("Item adicionado com sucesso!")
+                        }
+                    )
                 }
             )
         }

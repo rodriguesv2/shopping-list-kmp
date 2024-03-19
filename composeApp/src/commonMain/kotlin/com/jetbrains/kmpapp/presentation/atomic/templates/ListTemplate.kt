@@ -7,6 +7,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,6 +33,7 @@ fun ListTemplate(
     onItemClick: (ShoppingItem) -> Unit,
     onBackButtonClick: () -> Unit,
     loading: Boolean = false,
+    snackbarHostState: SnackbarHostState = SnackbarHostState(),
 ) {
     Scaffold(
         topBar = {
@@ -39,6 +43,18 @@ fun ListTemplate(
                     IconButtonAtom(
                         painter = painterResource(imageResource = MR.images.ic_back_arrow),
                         onClick = onBackButtonClick,
+                    )
+                }
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = {
+                    Snackbar(
+                        content = {
+                            Text("Item adicionado com sucesso!")
+                        }
                     )
                 }
             )
