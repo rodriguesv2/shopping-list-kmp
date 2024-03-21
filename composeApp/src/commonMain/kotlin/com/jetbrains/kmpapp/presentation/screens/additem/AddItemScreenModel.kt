@@ -3,16 +3,11 @@ package com.jetbrains.kmpapp.presentation.screens.additem
 import androidx.compose.material.SnackbarDuration
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.jetbrains.kmpapp.domain.entities.ShoppingItem
-import com.jetbrains.kmpapp.domain.repositories.ShoppingRepository
 import com.jetbrains.kmpapp.navigator
-import com.jetbrains.kmpapp.utils.extensions.launchRequest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class AddItemScreenModel(
-    private val repository: ShoppingRepository
-) : StateScreenModel<AddItemState>(AddItemState()) {
+class AddItemScreenModel: StateScreenModel<AddItemState>(AddItemState()) {
     init {
         setButtonState()
     }
@@ -32,27 +27,7 @@ class AddItemScreenModel(
     }
 
     fun onButtonClick() {
-        val shoppingItem = state.value.run {
-            ShoppingItem(
-                title = itemName,
-                quantity = itemQuantity,
-            )
-        }
-
-        screenModelScope.launchRequest(
-            block = { repository.createItem(shoppingItem) },
-            onLoading = { loading -> mutableState.update { it.copy(loading = loading) } },
-            onSuccess = {
-                showSuccessSnack()
-                mutableState.update {
-                    it.copy(
-                        itemName = "",
-                        itemQuantity = "1"
-                    )
-                }
-            },
-            onError = { mutableState.update { it.copy(errorMessage = "Erro Desconhecido") } }
-        )
+        //TODO
     }
 
     fun onDismissClick() {
